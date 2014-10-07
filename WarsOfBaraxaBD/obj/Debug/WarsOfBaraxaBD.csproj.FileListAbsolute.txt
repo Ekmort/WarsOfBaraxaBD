@@ -1,0 +1,8 @@
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\WarsOfBaraxaBD.dll
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\WarsOfBaraxaBD.pdb
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\Oracle.DataAccess.dll
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\warsofbaraxa.dll
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\warsofbaraxa.pdb
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.csprojResolveAssemblyReference.cache
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.dll
+C:\Users\200666155\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.pdb
