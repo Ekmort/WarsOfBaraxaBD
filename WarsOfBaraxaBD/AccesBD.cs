@@ -1,4 +1,4 @@
-﻿using System; 
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,9 +14,9 @@ namespace WarsOfBaraxaBD
         private String connexionChaine;
         public AccesBD()
         {
-           String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.104.127)"
-           + "(PORT = 1522)))(CONNECT_DATA =(SERVICE_NAME = WarsOfBaraxa)))";
-           connexionChaine = "data source=" + serveur + ";userid=WarsOfBaraxa;password=WarsOfBaraxa";
+            String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.104.127)"
+            + "(PORT = 1522)))(CONNECT_DATA =(SERVICE_NAME = WarsOfBaraxa)))";
+            connexionChaine = "data source=" + serveur + ";userid=WarsOfBaraxa;password=WarsOfBaraxa";
         }
 
         public void Connection()
@@ -25,19 +25,19 @@ namespace WarsOfBaraxaBD
             conn.Open();
         }
 
-        public Carte[] ListerDeckJoueur(String NomJoueur,int NoDeck)
+        public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
         {
-            Carte []CarteJoueur = null;
+            Carte[] CarteJoueur = null;
             string sql = "SELECT NomCarte,TypeCarte,Habilete,Ble,Bois,Gem,C.NoCarte,NombreDeFois FROM CARTE C " +
             "INNER JOIN DeckCarte CD ON C.NoCarte=CD.NoCarte " +
             "INNER JOIN DECK D ON CD.NoDeck=D.NoDeck " +
             "INNER JOIN DECKJOUEUR DJ ON D.NoDeck=DJ.NoDeck WHERE DJ.IdJoueur=" + NomJoueur + " AND DJ.NoDeck=" + NoDeck;
-            OracleCommand commandeOracle = new OracleCommand(sql,conn);
+            OracleCommand commandeOracle = new OracleCommand(sql, conn);
             OracleDataReader dataReader = commandeOracle.ExecuteReader();
 
-            if(dataReader.HasRows)
+            if (dataReader.HasRows)
             {
-                while(dataReader.Read())
+                while (dataReader.Read())
                 {
                     int i = 0;
                     for (int j = 0; j < dataReader.GetInt32(7); ++j)
@@ -58,7 +58,7 @@ namespace WarsOfBaraxaBD
         }
         public bool estPresent(string nomAlias, string mdp)
         {
-            string sql = "select * from joueur where IdJoueur='"+nomAlias+"' and Pword='"+mdp+"'";
+            string sql = "select * from joueur where IdJoueur='" + nomAlias + "' and Pword='" + mdp + "'";
             OracleCommand orac = new OracleCommand(sql, conn);
             OracleDataReader dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
@@ -76,7 +76,7 @@ namespace WarsOfBaraxaBD
             {
                 return true;
             }
-            return false;            
+            return false;
         }
     }
 }
