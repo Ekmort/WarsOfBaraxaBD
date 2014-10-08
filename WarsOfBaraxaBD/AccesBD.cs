@@ -51,5 +51,27 @@ namespace WarsOfBaraxaBD
             }
             return CarteJoueur;
         }
+        public bool estPresent(string nomAlias, string mdp)
+        {
+            string sql = "select * from joueur where IdJoueur='"+nomAlias+"' and Pword='"+mdp+"'";
+            OracleCommand orac = new OracleCommand(sql, conn);
+            OracleDataReader dataReader = orac.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool estDejaPresent(string nomAlias)
+        {
+            string sql = "select * from joueur where IdJoueur='" + nomAlias;
+            OracleCommand orac = new OracleCommand(sql, conn);
+            OracleDataReader dataReader = orac.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                return true;
+            }
+            return false;            
+        }
     }
 }
