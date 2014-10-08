@@ -28,7 +28,7 @@ namespace WarsOfBaraxaBD
         public Carte[] ListerDeckJoueur(String NomJoueur,int NoDeck)
         {
             Carte []CarteJoueur = null;
-            string sql = "SELECT NomCarte,TypeCarte,Habilete,Ble,Bois,Gem,C.NoCarte FROM CARTE C " +
+            string sql = "SELECT NomCarte,TypeCarte,Habilete,Ble,Bois,Gem,C.NoCarte,NombreDeFois FROM CARTE C " +
             "INNER JOIN DeckCarte CD ON C.NoCarte=CD.NoCarte " +
             "INNER JOIN DECK D ON CD.NoDeck=D.NoDeck " +
             "INNER JOIN DECKJOUEUR DJ ON D.NoDeck=DJ.NoDeck WHERE DJ.IdJoueur=" + NomJoueur + " AND DJ.NoDeck=" + NoDeck;
@@ -37,15 +37,20 @@ namespace WarsOfBaraxaBD
 
             if(dataReader.HasRows)
             {
-                for(int i=0;dataReader.Read();++i)
+                while(dataReader.Read())
                 {
-                    CarteJoueur[i] = new Carte(dataReader.GetString(0),dataReader.GetString(1),dataReader.GetString(2),dataReader.GetInt32(3),dataReader.GetInt32(4),dataReader.GetInt32(5));
-                    if(dataReader.GetString(1) == "Permanents")
+                    int i = 0;
+                    for (int j = 0; j < dataReader.GetInt32(7); ++j)
                     {
-                        string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + dataReader.GetInt32(5);
-                        OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm,conn);
-                        OracleDataReader dataReaderPerm = commandeOraclePerm.ExecuteReader();
-                        CarteJoueur[i].perm = new Permanent(dataReaderPerm.GetString(0),dataReaderPerm.GetInt32(1),dataReaderPerm.GetInt32(2),dataReaderPerm.GetInt32(3));
+                        CarteJoueur[i] = new Carte(dataReader.GetString(0), dataReader.GetString(1), dataReader.GetString(2), dataReader.GetInt32(3), dataReader.GetInt32(4), dataReader.GetInt32(5));
+                        if (dataReader.GetString(1) == "Permanents")
+                        {
+                            string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + dataReader.GetInt32(6);
+                            OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
+                            OracleDataReader dataReaderPerm = commandeOraclePerm.ExecuteReader();
+                            CarteJoueur[i].perm = new Permanent(dataReaderPerm.GetString(0), dataReaderPerm.GetInt32(1), dataReaderPerm.GetInt32(2), dataReaderPerm.GetInt32(3));
+                        }
+                        ++i;
                     }
                 }
             }
