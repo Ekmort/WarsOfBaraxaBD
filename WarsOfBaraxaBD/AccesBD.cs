@@ -12,11 +12,12 @@ namespace WarsOfBaraxaBD
     {
         static private OracleConnection conn;
         static private String connexionChaine;
+        static OracleDataReader dataReader;
         public AccesBD()
         {
             String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.104.127)"
             + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = ORCL)))";
-            connexionChaine = "data source=" + serveur + ";userid=WarsOfBaraxa;password=WarsOfBaraxa";
+            connexionChaine = "data source=" + serveur + ";user id=WarsOfBaraxa;password=WarsOfBaraxa";
         }
 
         public void Connection()
@@ -25,8 +26,9 @@ namespace WarsOfBaraxaBD
             conn.Open();
         }
 
-        static public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
+        public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
         {
+
             Carte[] CarteJoueur = new Carte[40];
             string sql = "SELECT NomCarte,TypeCarte,NVL(Habilete,'null'),Ble,Bois,Gem,C.NoCarte,NombreDeFois FROM CARTE C " +
             "INNER JOIN DeckCarte CD ON C.NoCarte=CD.NoCarte " +
@@ -36,26 +38,23 @@ namespace WarsOfBaraxaBD
 
             try
             {
-                OracleDataReader dataReader = commandeOracle.ExecuteReader();
+                dataReader = commandeOracle.ExecuteReader();
 
                 if (dataReader.HasRows)
                 {
-                    int i = 0;
+                    int Compteur = 0;
                     while (dataReader.Read())
                     {
                         for (int j = 0; j < dataReader.GetInt32(7); ++j)
                         {
-                            CarteJoueur[i] = new Carte(dataReader.GetString(0), dataReader.GetString(1), dataReader.GetString(2), dataReader.GetInt32(3), dataReader.GetInt32(4), dataReader.GetInt32(5));
-                            if (dataReader.GetString(1) == "Permanents")
-                            {
-                                string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + dataReader.GetInt32(6);
-                                OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
-                                OracleDataReader dataReaderPerm = commandeOraclePerm.ExecuteReader();
-                                CarteJoueur[i].perm = new Permanent(dataReaderPerm.GetString(0), dataReaderPerm.GetInt32(1), dataReaderPerm.GetInt32(2), dataReaderPerm.GetInt32(3));
-                            }
-                            ++i;
+                            CarteJoueur[Compteur] = new Carte(dataReader.GetInt32(6), dataReader.GetString(0), dataReader.GetString(1), dataReader.GetString(2), dataReader.GetInt32(3), dataReader.GetInt32(4), dataReader.GetInt32(5));
+                            ++Compteur;
                         }
                     }
+
+                    dataReader.Dispose();
+                    dataReader.Close();
+                    ListerPermanents(CarteJoueur);
                 }
             }
             catch (InvalidOperationException e)
@@ -63,6 +62,21 @@ namespace WarsOfBaraxaBD
                 Console.Write(e);
             }
             return CarteJoueur;
+        }
+
+        public void ListerPermanents(Carte[] CarteJoueur)
+        {
+            for (int i = 0; i < CarteJoueur.Length && CarteJoueur[i] !=null; ++i)
+            {
+                if (CarteJoueur[i].TypeCarte == "Permanents")
+                {
+                    string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + CarteJoueur[i].NoCarte;
+                    OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
+                    dataReader = commandeOraclePerm.ExecuteReader();
+                    dataReader.Read();
+                    CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(2), dataReader.GetInt32(3));
+                }
+            }
         }
         public bool estPresent(string nomAlias, string mdp)
         {
