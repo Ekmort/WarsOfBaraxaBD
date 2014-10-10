@@ -86,19 +86,60 @@ namespace WarsOfBaraxaBD
             if (dataReader.HasRows)
             {
                 return true;
+                dataReader.Dispose();
             }
+            dataReader.Dispose();
             return false;
         }
         public bool estDejaPresent(string nomAlias)
         {
-            string sql = "select * from joueur where IdJoueur='" + nomAlias;
+            string sql = "select * from joueur where IdJoueur='" + nomAlias + "'";
             OracleCommand orac = new OracleCommand(sql, conn);
             OracleDataReader dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
             {
+                dataReader.Dispose();
                 return true;
             }
+            dataReader.Dispose();
             return false;
+        }
+        public void ajouter(string alias, string mdp, string nom, string prenom)
+        {
+            try
+            {
+                OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+                orac.CommandText = "JOUEURPACKAGE.insertJoueur";
+                orac.CommandType = CommandType.StoredProcedure;
+
+                OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
+                OracleParameter oramdp = new OracleParameter("pPassword", OracleDbType.Varchar2);
+                OracleParameter oranom = new OracleParameter("pNom", OracleDbType.Varchar2);
+                OracleParameter oraprenom = new OracleParameter("pPrenom", OracleDbType.Varchar2);
+
+                oraalias.Value = alias;
+                oraalias.Direction = ParameterDirection.Input;
+
+                oramdp.Value = mdp;
+                oramdp.Direction = ParameterDirection.Input;
+
+                oranom.Value = nom;
+                oranom.Direction = ParameterDirection.Input;
+
+                oraprenom.Value = prenom;
+                oraprenom.Direction = ParameterDirection.Input;
+
+                orac.Parameters.Add(oraalias);
+                orac.Parameters.Add(oramdp);
+                orac.Parameters.Add(oranom);
+                orac.Parameters.Add(oraprenom);
+
+                orac.ExecuteNonQuery();
+            }
+            catch (OracleException ex)
+            {
+                string test = ex.Message;
+            }
         }
     }
 }
