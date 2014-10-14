@@ -41,8 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="warsofbaraxa">
-      <HintPath>..\..\warsofbaraxa\warsofbaraxa\bin\Debug\warsofbaraxa.dll</HintPath>
+    <Reference Include="warsofbaraxa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\warsofbaraxa\warsofbaraxa\bin\Debug\warsofbaraxa.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

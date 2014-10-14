@@ -17,7 +17,7 @@ namespace WarsOfBaraxaBD
         {
             String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.104.127)"
             + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = ORCL)))";
-            connexionChaine = "data source=" + serveur + ";userid=WarsOfBaraxa;password=WarsOfBaraxa";
+            connexionChaine = "data source=" + serveur + ";user id=WarsOfBaraxa;password=WarsOfBaraxa";
         }
 
         public void Connection()
@@ -26,7 +26,7 @@ namespace WarsOfBaraxaBD
             conn.Open();
         }
 
-        static public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
+        public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
         {
 
             Carte[] CarteJoueur = new Carte[40];
@@ -91,7 +91,7 @@ namespace WarsOfBaraxaBD
         }
         public bool estDejaPresent(string nomAlias)
         {
-            string sql = "select * from joueur where IdJoueur='" + nomAlias;
+            string sql = "select * from joueur where IdJoueur='" + nomAlias + "'";
             OracleCommand orac = new OracleCommand(sql, conn);
             OracleDataReader dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
@@ -99,6 +99,43 @@ namespace WarsOfBaraxaBD
                 return true;
             }
             return false;
+        }
+        public void ajouter(string alias, string mdp, string nom, string prenom)
+        {
+            try
+            {
+                OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+                orac.CommandText = "JOUEURPACKAGE.insertJoueur";
+                orac.CommandType = CommandType.StoredProcedure;
+
+                OracleParameter oraalias = new OracleParameter("pAlias", OracleDbType.Varchar2);
+                OracleParameter oraMDP = new OracleParameter("pPassword", OracleDbType.Varchar2);
+                OracleParameter oraNom = new OracleParameter("pNom", OracleDbType.Varchar2);
+                OracleParameter oraprenom = new OracleParameter("pPrenom", OracleDbType.Varchar2);
+
+                oraalias.Value = alias;
+                oraalias.Direction = ParameterDirection.Input;
+
+                oraMDP.Value = mdp;
+                oraMDP.Direction = ParameterDirection.Input;
+
+                oraNom.Value = nom;
+                oraNom.Direction = ParameterDirection.Input;
+
+                oraprenom.Value = prenom;
+                oraprenom.Direction = ParameterDirection.Input;
+
+                orac.Parameters.Add(oraalias);
+                orac.Parameters.Add(oraMDP);
+                orac.Parameters.Add(oraNom);
+                orac.Parameters.Add(oraprenom);
+
+                orac.ExecuteNonQuery();
+            }
+            catch (OracleException ora)
+            {
+                
+            }            
         }
     }
 }
