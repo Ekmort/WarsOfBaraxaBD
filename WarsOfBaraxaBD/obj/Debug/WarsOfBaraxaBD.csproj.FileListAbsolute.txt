@@ -13,3 +13,11 @@ C:\Users\Projet2\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\warsof
 C:\Users\Projet2\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.csprojResolveAssemblyReference.cache
 C:\Users\Projet2\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.dll
 C:\Users\Projet2\Documents\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.pdb
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\WarsOfBaraxaBD.dll
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\WarsOfBaraxaBD.pdb
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\Oracle.DataAccess.dll
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\warsofbaraxa.dll
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\bin\Debug\warsofbaraxa.pdb
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.csprojResolveAssemblyReference.cache
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.dll
+C:\Users\201240453\Desktop\GitHub\WarsOfBaraxaBD\WarsOfBaraxaBD\obj\Debug\WarsOfBaraxaBD.pdb
