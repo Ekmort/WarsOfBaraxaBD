@@ -77,28 +77,79 @@ namespace WarsOfBaraxaBD
                     CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(2), dataReader.GetInt32(3));
                 }
             }
+            dataReader.Dispose();
         }
         public bool estPresent(string nomAlias, string mdp)
         {
             string sql = "select * from joueur where IdJoueur='" + nomAlias + "' and Pword='" + mdp + "'";
             OracleCommand orac = new OracleCommand(sql, conn);
-            OracleDataReader dataReader = orac.ExecuteReader();
+            dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
             {
+                dataReader.Dispose();
                 return true;
             }
+            dataReader.Dispose();
             return false;
         }
         public bool estDejaPresent(string nomAlias)
         {
             string sql = "select * from joueur where IdJoueur='" + nomAlias + "'";
             OracleCommand orac = new OracleCommand(sql, conn);
-            OracleDataReader dataReader = orac.ExecuteReader();
+            dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
             {
+                dataReader.Dispose();
                 return true;
             }
+            dataReader.Dispose();
             return false;
+        }
+        public void AjouterVictoire(string alias)
+        {
+            OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+            orac.CommandText = "JOUEURPACKAGE.ajouterVictoire";
+            orac.CommandType = CommandType.StoredProcedure;
+
+            OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
+
+            oraalias.Value = alias;
+            oraalias.Direction = ParameterDirection.Input;
+
+            orac.Parameters.Add(oraalias);
+
+            orac.ExecuteNonQuery();
+        }
+        public void AjouterDefaite(string alias)
+        {
+            OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+            orac.CommandText = "JOUEURPACKAGE.ajotuerDefaite";
+            orac.CommandType = CommandType.StoredProcedure;
+
+            OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
+
+            oraalias.Value = alias;
+            oraalias.Direction = ParameterDirection.Input;
+
+            orac.Parameters.Add(oraalias);
+
+            orac.ExecuteNonQuery();           
+        }
+        public string getProfil(string alias)
+        { 
+            string sql = "select Victoire,Defaite from joueur where IdJoueur='" + alias+"'";
+            OracleCommand orac = new OracleCommand(sql, conn);
+            dataReader = orac.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                dataReader.Read();
+                int victoire = dataReader.GetInt32(0);
+                int defaite = dataReader.GetInt32(1);
+                dataReader.Dispose();
+                return victoire.ToString() + "," + defaite.ToString();
+            }
+            dataReader.Dispose();
+            return null;
         }
         public void ajouter(string alias, string mdp, string nom, string prenom)
         {
