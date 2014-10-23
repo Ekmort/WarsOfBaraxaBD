@@ -188,5 +188,23 @@ namespace WarsOfBaraxaBD
                 
             }            
         }
+        public string getDeckJoueur(string alias)
+        {
+            string message = "";
+            string sql = "select deck.nomdeck from deck inner join deckjoueur on deck.nodeck = deckjoueur.nodeck where deckjoueur.idjoueur = '" + alias+"'";
+            OracleCommand orac = new OracleCommand(sql, conn);
+            dataReader = orac.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                dataReader.Read();
+                message += dataReader.GetString(0);
+                while(dataReader.Read())
+                {
+                    message +="," + dataReader.GetString(0);
+                }
+                dataReader.Dispose();
+            }
+            return message;
+        }
     }
 }
