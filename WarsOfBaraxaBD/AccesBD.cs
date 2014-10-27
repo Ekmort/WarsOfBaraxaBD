@@ -17,7 +17,7 @@ namespace WarsOfBaraxaBD
         {
             String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = mercure.clg.qc.ca)"
             + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = ORCL.clg.qc.ca)))";
-            connexionChaine = "data source=" + serveur + ";user id=WarsOfBaraxa;password=WarsOfBaraxa";
+            connexionChaine = "data source=" + serveur + ";user id=menardal;password=oracle1";
         }
 
         public void Connection()
@@ -205,6 +205,27 @@ namespace WarsOfBaraxaBD
                 dataReader.Dispose();
             }
             return message;
+        }
+        public void setBasicDeck(string alias)
+        {
+            try
+            {
+                OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+                orac.CommandText = "JOUEURPACKAGE.ajouterBasicDeck";
+                orac.CommandType = CommandType.StoredProcedure;
+
+                OracleParameter oraalias = new OracleParameter("pAlias", OracleDbType.Varchar2);
+
+                oraalias.Value = alias;
+                oraalias.Direction = ParameterDirection.Input;
+
+                orac.Parameters.Add(oraalias);
+                orac.ExecuteNonQuery();
+            }
+            catch (OracleException ora)
+            {
+
+            }              
         }
     }
 }
