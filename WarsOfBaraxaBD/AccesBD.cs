@@ -25,7 +25,24 @@ namespace WarsOfBaraxaBD
             conn = new OracleConnection(connexionChaine);
             conn.Open();
         }
-
+        public int getNoDeck(string Nomdeck)
+        {
+            int noDeck = -1;
+            string sql = "select * from deck where NomDeck = '"+Nomdeck+"'";
+            OracleCommand command = new OracleCommand(sql,conn);
+            try
+            {
+                dataReader = command.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    dataReader.Read();
+                    noDeck = dataReader.GetInt32(0);
+                }
+                dataReader.Dispose();
+            }
+            catch (InvalidOperationException ex) { Console.WriteLine(ex.Message); }
+            return noDeck;
+        }
         public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
         {
 
