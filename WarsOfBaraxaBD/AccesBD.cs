@@ -91,7 +91,7 @@ namespace WarsOfBaraxaBD
                     OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
                     dataReader = commandeOraclePerm.ExecuteReader();
                     dataReader.Read();
-                    CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(2), dataReader.GetInt32(3));
+                    CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(3), dataReader.GetInt32(2));
                 }
             }
             dataReader.Dispose();
