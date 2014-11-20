@@ -154,7 +154,7 @@ namespace WarsOfBaraxaBD
         }
         public string getProfil(string alias)
         { 
-            string sql = "select Victoire,Defaite from joueur where IdJoueur='" + alias+"'";
+            string sql = "select Victoire,Defaite,idjoueur,Prenom,nom from joueur where IdJoueur='" + alias+"'";
             OracleCommand orac = new OracleCommand(sql, conn);
             dataReader = orac.ExecuteReader();
             if (dataReader.HasRows)
@@ -162,8 +162,10 @@ namespace WarsOfBaraxaBD
                 dataReader.Read();
                 int victoire = dataReader.GetInt32(0);
                 int defaite = dataReader.GetInt32(1);
+                string id= dataReader.GetString(2);
+                string nom = dataReader.GetString(3) + " " + dataReader.GetString(4);
                 dataReader.Dispose();
-                return victoire.ToString() + "," + defaite.ToString();
+                return victoire.ToString() + "," + defaite.ToString()+","+id+"," + nom;
             }
             dataReader.Dispose();
             return null;
