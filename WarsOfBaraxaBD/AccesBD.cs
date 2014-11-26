@@ -22,8 +22,12 @@ namespace WarsOfBaraxaBD
 
         public void Connection()
         {
-            conn = new OracleConnection(connexionChaine);
-            conn.Open();
+            try
+            {
+                conn = new OracleConnection(connexionChaine);
+                conn.Open();
+            }
+            catch (OracleException) { }
         }
         public int getNoDeck(string Nomdeck)
         {
@@ -83,91 +87,124 @@ namespace WarsOfBaraxaBD
 
         public void ListerPermanents(Carte[] CarteJoueur)
         {
-            for (int i = 0; i < CarteJoueur.Length && CarteJoueur[i] !=null; ++i)
+            try
             {
-                if (CarteJoueur[i].TypeCarte == "Permanents")
+                for (int i = 0; i < CarteJoueur.Length && CarteJoueur[i] != null; ++i)
                 {
-                    string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + CarteJoueur[i].NoCarte;
-                    OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
-                    dataReader = commandeOraclePerm.ExecuteReader();
-                    dataReader.Read();
-                    CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(3), dataReader.GetInt32(2));
+                    if (CarteJoueur[i].TypeCarte == "Permanents")
+                    {
+                        string sqlPerm = "SELECT TypePerm,Attaque,Armure,Vie FROM Permanents WHERE NoCarte=" + CarteJoueur[i].NoCarte;
+                        OracleCommand commandeOraclePerm = new OracleCommand(sqlPerm, conn);
+                        dataReader = commandeOraclePerm.ExecuteReader();
+                        dataReader.Read();
+                        CarteJoueur[i].perm = new Permanent(dataReader.GetString(0), dataReader.GetInt32(1), dataReader.GetInt32(3), dataReader.GetInt32(2));
+                    }
                 }
             }
+            catch (OracleException)
+            { }
             dataReader.Dispose();
         }
         public bool estPresent(string nomAlias, string mdp)
         {
-            string sql = "select * from joueur where IdJoueur='" + nomAlias + "' and Pword='" + mdp + "'";
-            OracleCommand orac = new OracleCommand(sql, conn);
-            dataReader = orac.ExecuteReader();
-            if (dataReader.HasRows)
+            try
+            {
+                string sql = "select * from joueur where IdJoueur='" + nomAlias + "' and Pword='" + mdp + "'";
+                OracleCommand orac = new OracleCommand(sql, conn);
+                dataReader = orac.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    dataReader.Dispose();
+                    return true;
+                }
+                dataReader.Dispose();
+            }
+            catch (OracleException)
             {
                 dataReader.Dispose();
-                return true;
             }
-            dataReader.Dispose();
             return false;
         }
         public bool estDejaPresent(string nomAlias)
         {
-            string sql = "select * from joueur where IdJoueur='" + nomAlias + "'";
-            OracleCommand orac = new OracleCommand(sql, conn);
-            dataReader = orac.ExecuteReader();
-            if (dataReader.HasRows)
+            try
+            {
+                string sql = "select * from joueur where IdJoueur='" + nomAlias + "'";
+                OracleCommand orac = new OracleCommand(sql, conn);
+                dataReader = orac.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    dataReader.Dispose();
+                    return true;
+                }
+                dataReader.Dispose();
+            }
+            catch (OracleException)
             {
                 dataReader.Dispose();
-                return true;
             }
-            dataReader.Dispose();
             return false;
         }
         public void AjouterVictoire(string alias)
         {
-            OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
-            orac.CommandText = "JOUEURPACKAGE.ajouterVictoire";
-            orac.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+                orac.CommandText = "JOUEURPACKAGE.ajouterVictoire";
+                orac.CommandType = CommandType.StoredProcedure;
 
-            OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
+                OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
 
-            oraalias.Value = alias;
-            oraalias.Direction = ParameterDirection.Input;
+                oraalias.Value = alias;
+                oraalias.Direction = ParameterDirection.Input;
 
-            orac.Parameters.Add(oraalias);
+                orac.Parameters.Add(oraalias);
 
-            orac.ExecuteNonQuery();
+                orac.ExecuteNonQuery();
+            }
+            catch (OracleException) { }
         }
         public void AjouterDefaite(string alias)
         {
-            OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
-            orac.CommandText = "JOUEURPACKAGE.ajotuerDefaite";
-            orac.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                OracleCommand orac = new OracleCommand("JOUEURPACKAGE", conn);
+                orac.CommandText = "JOUEURPACKAGE.ajotuerDefaite";
+                orac.CommandType = CommandType.StoredProcedure;
 
-            OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
+                OracleParameter oraalias = new OracleParameter("pId", OracleDbType.Varchar2);
 
-            oraalias.Value = alias;
-            oraalias.Direction = ParameterDirection.Input;
+                oraalias.Value = alias;
+                oraalias.Direction = ParameterDirection.Input;
 
-            orac.Parameters.Add(oraalias);
+                orac.Parameters.Add(oraalias);
 
-            orac.ExecuteNonQuery();           
+                orac.ExecuteNonQuery();
+            }
+            catch (OracleException ora)
+            { }
         }
         public string getProfil(string alias)
-        { 
-            string sql = "select Victoire,Defaite,idjoueur,Prenom,nom from joueur where IdJoueur='" + alias+"'";
-            OracleCommand orac = new OracleCommand(sql, conn);
-            dataReader = orac.ExecuteReader();
-            if (dataReader.HasRows)
+        {
+            try
             {
-                dataReader.Read();
-                int victoire = dataReader.GetInt32(0);
-                int defaite = dataReader.GetInt32(1);
-                string id= dataReader.GetString(2);
-                string nom = dataReader.GetString(3) + " " + dataReader.GetString(4);
+                string sql = "select Victoire,Defaite,idjoueur,Prenom,nom from joueur where IdJoueur='" + alias + "'";
+                OracleCommand orac = new OracleCommand(sql, conn);
+                dataReader = orac.ExecuteReader();
+                if (dataReader.HasRows)
+                {
+                    dataReader.Read();
+                    int victoire = dataReader.GetInt32(0);
+                    int defaite = dataReader.GetInt32(1);
+                    string id = dataReader.GetString(2);
+                    string nom = dataReader.GetString(3) + " " + dataReader.GetString(4);
+                    dataReader.Dispose();
+                    return victoire.ToString() + "," + defaite.ToString() + "," + id + "," + nom;
+                }
                 dataReader.Dispose();
-                return victoire.ToString() + "," + defaite.ToString()+","+id+"," + nom;
             }
-            dataReader.Dispose();
+            catch (OracleException ora)
+            { }
             return null;
         }
         public void ajouter(string alias, string mdp, string nom, string prenom)
@@ -204,25 +241,29 @@ namespace WarsOfBaraxaBD
             }
             catch (OracleException ora)
             {
-                
+                                
             }            
         }
         public string getDeckJoueur(string alias)
         {
             string message = "";
-            string sql = "select deck.nomdeck from deck inner join deckjoueur on deck.nodeck = deckjoueur.nodeck where deckjoueur.idjoueur = '" + alias+"'";
-            OracleCommand orac = new OracleCommand(sql, conn);
-            dataReader = orac.ExecuteReader();
-            if (dataReader.HasRows)
+            try
             {
-                dataReader.Read();
-                message += dataReader.GetString(0);
-                while(dataReader.Read())
+                string sql = "select deck.nomdeck from deck inner join deckjoueur on deck.nodeck = deckjoueur.nodeck where deckjoueur.idjoueur = '" + alias + "'";
+                OracleCommand orac = new OracleCommand(sql, conn);
+                dataReader = orac.ExecuteReader();
+                if (dataReader.HasRows)
                 {
-                    message +="," + dataReader.GetString(0);
+                    dataReader.Read();
+                    message += dataReader.GetString(0);
+                    while (dataReader.Read())
+                    {
+                        message += "," + dataReader.GetString(0);
+                    }
+                    dataReader.Dispose();
                 }
-                dataReader.Dispose();
             }
+            catch (OracleException ora) { }
             return message;
         }
         public void setBasicDeck(string alias)
