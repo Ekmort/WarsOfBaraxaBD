@@ -25,9 +25,39 @@ namespace WarsOfBaraxaBD
             try
             {
                 conn = new OracleConnection(connexionChaine);
-                conn.Open();
             }
             catch (OracleException) { }
+        }
+        public void Open()
+        { 
+            if(conn.State.ToString() != "Open")
+            {
+                try
+                {
+                    conn.Open();
+                }
+                catch(OracleException){}
+            }
+        }
+        public void close()
+        {
+            if (conn.State.ToString() == "Open")
+            {
+                try
+                {
+                    conn.Close();
+                }
+                catch (OracleException) { }
+            }            
+        }
+        public void clear()
+        {
+            try 
+            {
+                conn.PurgeStatementCache();
+            }
+            catch(OracleException)
+            {}
         }
         public int getNoDeck(string Nomdeck)
         {
