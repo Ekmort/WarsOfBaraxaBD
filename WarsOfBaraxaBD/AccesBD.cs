@@ -50,15 +50,7 @@ namespace WarsOfBaraxaBD
                 catch (OracleException) { }
             }            
         }
-        public void clear()
-        {
-            try 
-            {
-                conn.PurgeStatementCache();
-            }
-            catch(OracleException)
-            {}
-        }
+
         public int getNoDeck(string Nomdeck)
         {
             int noDeck = -1;
