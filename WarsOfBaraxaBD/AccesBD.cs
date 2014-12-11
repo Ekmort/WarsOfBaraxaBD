@@ -15,11 +15,12 @@ namespace WarsOfBaraxaBD
         static OracleDataReader dataReader;
         public AccesBD()
         {
+	    //chaine de connexion pour la bd
             String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = mercure.clg.qc.ca)"
             + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = orcl.clg.qc.ca)))";
             connexionChaine = "data source=" + serveur + ";user id=Menardal;password=oracle1";
         }
-
+        //créer la conn
         public void Connection()
         {
             try
@@ -28,8 +29,10 @@ namespace WarsOfBaraxaBD
             }
             catch (OracleException) { }
         }
+        //ouvrir la conn
         public void Open()
         { 
+            //si elle n'est pas déjà ouverte
             if(conn.State.ToString() != "Open")
             {
                 try
@@ -39,8 +42,10 @@ namespace WarsOfBaraxaBD
                 catch(OracleException){}
             }
         }
+        //fermer la conn
         public void close()
         {
+            //si elle est ouverte
             if (conn.State.ToString() == "Open")
             {
                 try
@@ -50,7 +55,7 @@ namespace WarsOfBaraxaBD
                 catch (OracleException) { }
             }            
         }
-
+        //retourne le num du deck de la BD
         public int getNoDeck(string Nomdeck)
         {
             int noDeck = -1;
@@ -69,6 +74,7 @@ namespace WarsOfBaraxaBD
             catch (InvalidOperationException ex) { Console.WriteLine(ex.Message); }
             return noDeck;
         }
+        //crée un tableau de carte de 40 carte
         public Carte[] ListerDeckJoueur(String NomJoueur, int NoDeck)
         {
 
@@ -97,6 +103,7 @@ namespace WarsOfBaraxaBD
 
                     dataReader.Dispose();
                     dataReader.Close();
+                    //liste les permanents apres, car on ne peut pas faire 2 appel avec le meme datareader donc on le fait apres avoir lister les cartes
                     ListerPermanents(CarteJoueur);
                 }
             }
@@ -106,7 +113,7 @@ namespace WarsOfBaraxaBD
             }
             return CarteJoueur;
         }
-
+        //liste les cartes
         public void ListerPermanents(Carte[] CarteJoueur)
         {
             try
@@ -127,6 +134,7 @@ namespace WarsOfBaraxaBD
             { }
             dataReader.Dispose();
         }
+        //vérifie si le joueur est présent dans la BD retourne vrai si il est présent et faux si non présent
         public bool estPresent(string nomAlias, string mdp)
         {
             try
@@ -147,6 +155,7 @@ namespace WarsOfBaraxaBD
             }
             return false;
         }
+        //vérifie si le joueur est déjà dans la BD retourne vrai si le joueur est déjà présent et false si non présent
         public bool estDejaPresent(string nomAlias)
         {
             try
@@ -167,6 +176,7 @@ namespace WarsOfBaraxaBD
             }
             return false;
         }
+        //rajoute une victoire au joueur
         public void AjouterVictoire(string alias)
         {
             try
@@ -186,6 +196,7 @@ namespace WarsOfBaraxaBD
             }
             catch (OracleException) { }
         }
+        //rajoute une défaite au joueur
         public void AjouterDefaite(string alias)
         {
             try
@@ -206,6 +217,7 @@ namespace WarsOfBaraxaBD
             catch (OracleException ora)
             { }
         }
+        //retourne le profil
         public string getProfil(string alias)
         {
             try
@@ -229,6 +241,7 @@ namespace WarsOfBaraxaBD
             { }
             return null;
         }
+        //ajoute un joueur a la BD
         public void ajouter(string alias, string mdp, string nom, string prenom)
         {
             try
@@ -266,6 +279,7 @@ namespace WarsOfBaraxaBD
                                 
             }            
         }
+        //retourne les nom de deck au joueur
         public string getDeckJoueur(string alias)
         {
             string message = "";
@@ -288,6 +302,7 @@ namespace WarsOfBaraxaBD
             catch (OracleException ora) { }
             return message;
         }
+        //ajoute les deck de base
         public void setBasicDeck(string alias)
         {
             try
