@@ -15,9 +15,9 @@ namespace WarsOfBaraxaBD
         static OracleDataReader dataReader;
         public AccesBD()
         {
-            String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = bd.thronewars.ca)"
-            + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = ORCL)))";
-            connexionChaine = "data source=" + serveur + ";user id=WarsOfBaraxa;password=WarsOfBaraxa";
+            String serveur = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = mercure.clg.qc.ca)"
+            + "(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = orcl.clg.qc.ca)))";
+            connexionChaine = "data source=" + serveur + ";user id=Menardal;password=oracle1";
         }
 
         public void Connection()
